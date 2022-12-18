@@ -1,62 +1,40 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/13 16:34:07 by chabrune          #+#    #+#             */
+/*   Updated: 2022/12/13 16:44:31 by chabrune         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <memory.h>
-#define WIDTH 1680
-#define HEIGHT 1200
 
-mlx_image_t *img;
-
-void	hook(void *param)
+char	**map_read(int fd)
 {
-	mlx_t	*mlx;
-
-	mlx = param;
-	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
-		mlx_close_window(mlx);
-	if (mlx_is_key_down(mlx, MLX_KEY_W))
-		img->instances[0].y -= 20;
-	if (mlx_is_key_down(mlx, MLX_KEY_S))
-		img->instances[0].y += 20;
-	if (mlx_is_key_down(mlx, MLX_KEY_A))
-		img->instances[0].x -= 20;
-	if (mlx_is_key_down(mlx, MLX_KEY_D))
-		img->instances[0].x += 20;
+	t_list *list;
+	char **maps;
+		
 }
 
-static void error(void)
+	
+
+int main(int argc, char **argv)
 {
-	puts(mlx_strerror(mlx_errno));
-	exit(EXIT_FAILURE);
-}
+	int fd;
+	char **maps;
 
-int32_t	main(void)
-{
-
-
-	// Start mlx
-	mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "Test", true);
-	if (!mlx)
-        error();
-	// Try to load the file
-	mlx_texture_t* xpm = mlx_load_png("PNG/perso.png");
-	if (!xpm)
-        error();   
-	// Convert texture to a displayable image
-	img = mlx_texture_to_image(mlx, xpm);
-	if (!img)
-        error();
-
-	// Display the image
-	if (mlx_image_to_window(mlx, img, 0, 0) < 0)
-        error();
-        mlx_loop_hook(mlx, &hook, mlx);
-	mlx_loop(mlx);
-
-	// Optional, terminate will clean up any left overs, this is just to demonstrate.
-	mlx_delete_image(mlx, img);
-	mlx_delete_texture(xpm);
-	mlx_terminate(mlx);
-	return (EXIT_SUCCESS);
+	(void)argv;
+	if (argc != 2)
+	{
+		printf("Error\n Nombre d'argument invalide");
+		return (-1);
+	}
+	else
+	{
+		fd = open("MAPS/maps.ber", O_RDONLY);
+		maps = map_read(fd);
+	}
 }

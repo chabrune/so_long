@@ -6,13 +6,13 @@
 /*   By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 06:54:41 by chabrune          #+#    #+#             */
-/*   Updated: 2022/12/13 14:21:43 by chabrune         ###   ########.fr       */
+/*   Updated: 2022/12/19 11:39:38 by chabrune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen_GNL(const char *str)
 {
 	size_t	i;
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin_GNL(char *s1, char *s2)
 {
 	size_t	i;
 	size_t	j;
@@ -34,7 +34,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		s1 = ft_calloc(1, sizeof(char));
 	if ((!s1 || !s2) && !s1)
 		return (ft_free(s1));
-	str = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof(char));
+	str = ft_calloc((ft_strlen_GNL(s1) + ft_strlen_GNL(s2) + 1), sizeof(char));
 	if (!str)
 		return (ft_free(s1));
 	while (s1[i] != '\0')
@@ -46,7 +46,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (str);
 }
 
-int	ft_strchr(char *s, int c)
+int	ft_strchr_GNL(char *s, int c)
 {
 	int	i;
 

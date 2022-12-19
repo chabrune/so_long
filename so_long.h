@@ -6,7 +6,7 @@
 /*   By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 16:34:04 by chabrune          #+#    #+#             */
-/*   Updated: 2022/12/13 16:34:05 by chabrune         ###   ########.fr       */
+/*   Updated: 2022/12/19 13:55:55 by chabrune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 # include "../ft_printf/ft_printf.h"
 # include "../libft/libft.h"
 
-char	*ft_strdup(char *s);
-char	**map_read(int fd);
-
+char	*ft_strdup(const char *s);
+size_t	ft_strlen(const char *str);
+char	*ft_strchr(const char *s, int c);
 
 #endif

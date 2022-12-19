@@ -6,7 +6,7 @@
 /*   By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 06:54:16 by chabrune          #+#    #+#             */
-/*   Updated: 2022/12/13 14:21:51 by chabrune         ###   ########.fr       */
+/*   Updated: 2022/12/19 11:39:10 by chabrune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*ft_read(int fd, char *stash)
 	buff = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
 		return (ft_free(stash));
-	while (readed > 0 && (!ft_strchr(stash, '\n')))
+	while (readed > 0 && (!ft_strchr_GNL(stash, '\n')))
 	{
 		readed = read(fd, buff, BUFFER_SIZE);
 		if (readed < 0)
@@ -55,7 +55,7 @@ char	*ft_read(int fd, char *stash)
 			return (ft_free(buff));
 		}
 		buff[readed] = '\0';
-		stash = ft_strjoin(stash, buff);
+		stash = ft_strjoin_GNL(stash, buff);
 		if (!stash)
 			return (ft_free(buff));
 	}
@@ -73,7 +73,7 @@ char	*ft_line(char *stash)
 		return (NULL);
 	while (stash[i] && stash[i] != '\n')
 		i++;
-	if (ft_strchr(stash, '\n'))
+	if (ft_strchr_GNL(stash, '\n'))
 		buff = (char *)malloc((i + 2) * sizeof(char));
 	else
 		buff = (char *)malloc((i + 1) * sizeof(char));
@@ -104,7 +104,7 @@ char	*ft_save(char *stash)
 		return (ft_free(stash));
 	if (stash[i] == '\n')
 		i++;
-	s = (char *)malloc(sizeof(char) * (ft_strlen(stash) - i + 1));
+	s = (char *)malloc(sizeof(char) * (ft_strlen_GNL(stash) - i + 1));
 	if (!s)
 		return (ft_free(stash));
 	j = 0;

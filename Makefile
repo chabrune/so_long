@@ -6,7 +6,7 @@
 #    By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 16:34:11 by chabrune          #+#    #+#              #
-#    Updated: 2022/12/18 16:37:26 by chabrune         ###   ########.fr        #
+#    Updated: 2022/12/19 12:05:24 by chabrune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,12 +42,13 @@ TASOEUR		= 	utils.c \
 all:		${NAME}
 
 ${NAME}:	${OBJS}
+			${MAKE} -C ../libft bonus
 			${MAKE} -C ../ft_printf
-			gcc ${CFLAGS} ${FT_PRINTF} ${TASOEUR} ${OBJS} ${MLX42} -o ${NAME}
+			gcc ${CFLAGS} ${FT_PRINTF} ${LIBFT} ${TASOEUR} ${OBJS} ${MLX42} -o ${NAME}
 
 clean:
 			${RM} ${OBJS}
-			${MAKE} -C ../ft_printf
+			${MAKE} -C ../ft_printf clean
 
 fclean:		clean
 			${RM} ${NAME}

@@ -6,7 +6,7 @@
 #    By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 16:34:11 by chabrune          #+#    #+#              #
-#    Updated: 2022/12/19 12:05:24 by chabrune         ###   ########.fr        #
+#    Updated: 2022/12/21 15:16:03 by chabrune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,11 @@ ${NAME}:	${OBJS}
 			${MAKE} -C ../libft bonus
 			${MAKE} -C ../ft_printf
 			gcc ${CFLAGS} ${FT_PRINTF} ${LIBFT} ${TASOEUR} ${OBJS} ${MLX42} -o ${NAME}
+
+debug:		fclean ${OBJS}
+			${MAKE} -C ../libft bonus
+			${MAKE} -C ../ft_printf
+			gcc ${CFLAGS} -fsanitize=address ${FT_PRINTF} ${LIBFT} ${TASOEUR} ${OBJS} ${MLX42} -o ${NAME}
 
 clean:
 			${RM} ${OBJS}

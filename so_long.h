@@ -6,7 +6,7 @@
 /*   By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 16:34:04 by chabrune          #+#    #+#             */
-/*   Updated: 2023/01/07 18:22:12 by chabrune         ###   ########.fr       */
+/*   Updated: 2023/01/08 14:37:42 by chabrune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ typedef struct s_pos
 
 typedef struct s_data
 {
+    mlx_image_t	*perso;
+	mlx_image_t	*wall;
+	mlx_image_t	*land;
+	mlx_image_t	*col;
+	mlx_image_t	*exit;
+    mlx_image_t *all;
     int check_C;
 	int check_E;
 	int check_P;
@@ -46,6 +52,7 @@ typedef struct s_data
     int C_count;
     t_map map;
     t_pos P_position;
+    mlx_t   *mlx;
 } t_data;
 
 char	*ft_strdup(const char *s);

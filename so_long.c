@@ -6,7 +6,7 @@
 /*   By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 16:34:07 by chabrune          #+#    #+#             */
-/*   Updated: 2023/01/07 18:54:11 by chabrune         ###   ########.fr       */
+/*   Updated: 2023/01/08 14:57:35 by chabrune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,10 @@ char **map_read(int fd)
 	line = get_next_line(fd);
 	while(line)
 	{
-		ft_printf("%s", line);
 		tmp = ft_lstnew(line);
 		ft_lstadd_back(&list, tmp);
 		line = get_next_line(fd);
 	}
-	ft_printf("\n");
 	maps = malloc(sizeof(char *) * ft_lstsize(list));
 	if (!maps)
 		return (NULL);
@@ -50,7 +48,6 @@ char **map_read(int fd)
 	{
 		maps[i] = ft_strdup(list->content);
 		ft_lstdelone(list, free);
-		ft_printf("%s\n", maps[i]);
 		list = list->next;
 		i++;
 	}
@@ -88,9 +85,6 @@ int ckeck_full_one(t_map map)
 
 int check_letter(t_data *data)
 {
-	// data->check_C = 0;
-	// check_E = 0;
-	// check_P = 0;
 	while(data->map.maps[data->map.x])
 	{
 		data->map.y = 0;
@@ -102,6 +96,8 @@ int check_letter(t_data *data)
 				data->check_E++;
 			if(data->map.maps[data->map.x][data->map.y] == 'P')
 			{
+				data->P_position.x = data->map.x;
+				data->P_position.y = data->map.y;
 				data->check_P++;
 			}
 			if(data->map.maps[data->map.x][data->map.y] != 'P' 
@@ -113,7 +109,6 @@ int check_letter(t_data *data)
 			data->map.y++;
 		}
 		data->map.x++;
-		ft_printf("%d\n", data->map.y);
 	}
 	if(data->check_C < 1 || data->check_E != 1 || data->check_P != 1)
 		return(-1);
@@ -153,6 +148,71 @@ int check_error_name(char *s)
 	return (0);
 }
 
+void	ft_init(t_data *data, t_map map)
+{
+	data->mlx = mlx_init((map.y * 64), (map.x * 64), "so_long", false);
+	data->perso = mlx_texture_to_image(data->mlx, mlx_load_png("PNG/perso.png"));
+	data->wall = mlx_texture_to_image(data->mlx, mlx_load_png("PNG/wall.png"));
+	data->col = mlx_texture_to_image(data->mlx, mlx_load_png("PNG/collect.png"));
+	data->land = mlx_texture_to_image(data->mlx, mlx_load_png("PNG/land.png"));
+	data->exit = mlx_texture_to_image(data->mlx, mlx_load_png("PNG/wall.png"));
+}
+
+void	image_to_window(t_data *data, t_map map)
+{
+	map.x = 0;
+	while (map.maps[map.x])
+	{
+		map.y = 0;
+		while(map.maps[map.x][map.y])
+		{
+			mlx_image_to_window(data->mlx, data->land, (64 * map.y), (64 * map.x));
+			if (map.maps[map.x][map.y] == 'C')
+				mlx_image_to_window(data->mlx, data->col, (64 * map.y), (64 * map.x));
+			if (map.maps[map.x][map.y] == 'E')
+				mlx_image_to_window(data->mlx, data->exit, (64 * map.y), (64 * map.x));
+			if (map.maps[map.x][map.y] == '1')
+				mlx_image_to_window(data->mlx, data->wall, (64 * map.y), (64 * map.x));
+			map.y++;
+		}
+		map.x++;
+	}
+}
+
+void	hook(mlx_key_data_t keydata, void *param)
+{
+	t_data *data;
+
+	data = param;
+	(void)keydata;
+	// data->perso->instances[0].enabled = 1;
+	if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(data->mlx);
+	if (mlx_is_key_down(data->mlx, MLX_KEY_W))
+	{
+		if(data->map.maps[(data->perso->instances[0].y /64) - 1][data->perso->instances[0].x / 64] != '1')
+			data->perso->instances[0].y -= 64;
+	}
+	if (mlx_is_key_down(data->mlx, MLX_KEY_S))
+		 data->perso->instances[0].y += 64;
+	if (mlx_is_key_down(data->mlx, MLX_KEY_A))
+		 data->perso->instances[0].x -= 64;
+	if (mlx_is_key_down(data->mlx, MLX_KEY_D))
+		 data->perso->instances[0].x += 64;
+}
+
+int	open_window(t_data *data)
+{
+	ft_init(data, data->map);
+	image_to_window(data, data->map);
+	mlx_image_to_window(data->mlx, data->perso, (64 * data->P_position.y), (64 * data->P_position.x));
+	mlx_key_hook(data->mlx, &hook, data);
+	mlx_loop(data->mlx);
+	mlx_terminate(data->mlx);
+	return (EXIT_SUCCESS);
+}
+
+
 int main(int argc, char **argv)
 {
 	int fd;
@@ -160,7 +220,6 @@ int main(int argc, char **argv)
 	t_map map;
 	t_data data;
 
-	//data = NULL;
 	i = 0;
 	if (argc != 2)
 	{
@@ -189,5 +248,6 @@ int main(int argc, char **argv)
 		ft_printf("Error\nLetter invalide");
 		return(-1);
 	}
+	open_window(&data);
 	return (0);
 }

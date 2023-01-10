@@ -6,7 +6,7 @@
 /*   By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 16:34:04 by chabrune          #+#    #+#             */
-/*   Updated: 2023/01/08 14:37:42 by chabrune         ###   ########.fr       */
+/*   Updated: 2023/01/10 13:44:39 by chabrune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,18 @@
 # include "../ft_printf/ft_printf.h"
 # include "../libft/libft.h"
 
-typedef struct s_map
-{
-    char **maps;
-    int x;
-    int y;
-} t_map;
-
 typedef struct s_pos
 {
     int x;
     int y;
 } t_pos;
+
+typedef struct s_map
+{
+    char **maps;
+    int x;
+    int y;
+}   t_map;
 
 typedef struct s_data
 {
@@ -48,9 +48,12 @@ typedef struct s_data
     int check_C;
 	int check_E;
 	int check_P;
+    char **maps;
+    int x;
+    int y;
+    t_map map;
     int foot_count;
     int C_count;
-    t_map map;
     t_pos P_position;
     mlx_t   *mlx;
 } t_data;

@@ -6,7 +6,7 @@
 /*   By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 16:34:07 by chabrune          #+#    #+#             */
-/*   Updated: 2023/01/08 14:57:35 by chabrune         ###   ########.fr       */
+/*   Updated: 2023/01/10 17:29:46 by chabrune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	set_data(t_data *data, t_map map)
     data->C_count = 0;
 }
 
-char **map_read(int fd)
+char **map_read(int fd, t_map *map)
 {
 	t_list *list;
 	char *line;
@@ -44,6 +44,7 @@ char **map_read(int fd)
 	maps = malloc(sizeof(char *) * ft_lstsize(list));
 	if (!maps)
 		return (NULL);
+	map->y = ft_lstsize(list);
 	while (list)
 	{
 		maps[i] = ft_strdup(list->content);
@@ -52,6 +53,7 @@ char **map_read(int fd)
 		i++;
 	}
 	maps[i] = NULL;
+	map->x = ft_strlen(*maps);
 	return maps;
 }
 
@@ -155,56 +157,157 @@ void	ft_init(t_data *data, t_map map)
 	data->wall = mlx_texture_to_image(data->mlx, mlx_load_png("PNG/wall.png"));
 	data->col = mlx_texture_to_image(data->mlx, mlx_load_png("PNG/collect.png"));
 	data->land = mlx_texture_to_image(data->mlx, mlx_load_png("PNG/land.png"));
-	data->exit = mlx_texture_to_image(data->mlx, mlx_load_png("PNG/wall.png"));
+	data->exit = mlx_texture_to_image(data->mlx, mlx_load_png("PNG/exit.png"));
 }
 
-void	image_to_window(t_data *data, t_map map)
+void	image_to_window(t_data *data, t_map *map)
 {
-	map.x = 0;
-	while (map.maps[map.x])
+	int i;
+	int j;
+
+	i = 0;
+	while (i < map->x)
 	{
-		map.y = 0;
-		while(map.maps[map.x][map.y])
+		j = 0;
+		while(j < map->y)
 		{
-			mlx_image_to_window(data->mlx, data->land, (64 * map.y), (64 * map.x));
-			if (map.maps[map.x][map.y] == 'C')
-				mlx_image_to_window(data->mlx, data->col, (64 * map.y), (64 * map.x));
-			if (map.maps[map.x][map.y] == 'E')
-				mlx_image_to_window(data->mlx, data->exit, (64 * map.y), (64 * map.x));
-			if (map.maps[map.x][map.y] == '1')
-				mlx_image_to_window(data->mlx, data->wall, (64 * map.y), (64 * map.x));
-			map.y++;
+			mlx_image_to_window(data->mlx, data->land, (64 * j), (64 * i));
+			if (map->maps[i][j] == 'C')
+				mlx_image_to_window(data->mlx, data->col, (64 * j), (64 * i));
+			// if (map->maps[i][j] == 'E')
+			// 	mlx_image_to_window(data->mlx, data->exit, (64 * j), (64 * i));
+			if (map->maps[i][j] == '1')
+				mlx_image_to_window(data->mlx, data->wall, (64 * j), (64 * i));
+			j++;
 		}
-		map.x++;
+		i++;
 	}
 }
 
-void	hook(mlx_key_data_t keydata, void *param)
-{
-	t_data *data;
+// void	collect_to_window(t_data *data)
+// {
+// 	int i;
+// 	int j;
 
-	data = param;
-	(void)keydata;
-	// data->perso->instances[0].enabled = 1;
-	if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
-		mlx_close_window(data->mlx);
-	if (mlx_is_key_down(data->mlx, MLX_KEY_W))
+// 	i = 0;
+// 	while (i < 5)
+// 	{
+// 		j = 0;
+// 		while(j < 34)
+// 		{
+// 			if (data->map->maps[i][j] == 'E')
+// 				mlx_image_to_window(data->mlx, data->exit, (64 * j), (64 * i));
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// }
+
+int f_fill(char **mapff, int x, int y)
+{
+	static int i = 0;
+    if (mapff[x][y] == '1')
+        return 0;
+	if (mapff[x][y] == 'C' || mapff[x][y] == 'E')
+		i++;
+    mapff[x][y] = '1';
+
+    f_fill(mapff, x -1, y);
+    f_fill(mapff, x +1, y);
+    f_fill(mapff, x, y - 1);
+    f_fill(mapff, x, y + 1);
+	return(i);
+}
+
+int  flood_fill(t_data data, t_map *map, char *path)
+{
+	int i;
+	int fd;
+	int collect;
+	char **mapff;
+
+	i = 0;
+	fd = open(path, O_RDWR);
+	mapff = map_read(fd, map); 
+	collect = f_fill(mapff, data.P_position.x, data.P_position.y);
+	data.check_C++;
+	if (collect != data.check_C)
 	{
-		if(data->map.maps[(data->perso->instances[0].y /64) - 1][data->perso->instances[0].x / 64] != '1')
-			data->perso->instances[0].y -= 64;
+		ft_printf("Error\nMap invalide");
+		return(-1);
 	}
-	if (mlx_is_key_down(data->mlx, MLX_KEY_S))
-		 data->perso->instances[0].y += 64;
-	if (mlx_is_key_down(data->mlx, MLX_KEY_A))
-		 data->perso->instances[0].x -= 64;
-	if (mlx_is_key_down(data->mlx, MLX_KEY_D))
-		 data->perso->instances[0].x += 64;
+	return(0);
+}
+
+void	ft_collect(t_data *data)
+{
+	int i;
+
+	i = 0;
+	while(i < data->check_C)
+	{
+		if(data->perso->instances[0].y == data->col->instances[i].y && data->perso->instances[0].x == data->col->instances[i].x)
+			data->col->instances[i].enabled = false;
+		i++;
+	}
+	// if (i == data->check_C)
+	// 	collect_to_window(data);
+}
+
+void    hook(mlx_key_data_t keydata, void *param)
+{
+    t_data *data;
+
+    data = param;
+    (void)keydata;
+    if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
+        mlx_close_window(data->mlx);
+    else if (mlx_is_key_down(data->mlx, MLX_KEY_W))
+    {
+        if(data->map.maps[(data->perso->instances[0].y / 64) - 1][data->perso->instances[0].x / 64] != '1')
+        {
+            data->perso->instances[0].y -= 64;
+            data->foot_count++;
+            ft_printf("Vous avez fait %d pas\n", data->foot_count);
+        }
+		ft_collect(data);
+	}
+    else if (mlx_is_key_down(data->mlx, MLX_KEY_S))
+    {
+        if(data->map.maps[(data->perso->instances[0].y / 64) + 1][(data->perso->instances[0].x / 64)] != '1')
+        {
+            data->perso->instances[0].y += 64;
+            data->foot_count++;
+            ft_printf("Vous avez fait %d pas\n", data->foot_count);
+        }
+		ft_collect(data);
+    }
+    else if (mlx_is_key_down(data->mlx, MLX_KEY_A))
+    {
+        if(data->map.maps[(data->perso->instances[0].y / 64)][(data->perso->instances[0].x / 64) - 1] != '1')
+        {
+            data->perso->instances[0].x -= 64;
+            data->foot_count++;
+            ft_printf("Vous avez fait %d pas\n", data->foot_count);
+        }
+		ft_collect(data);
+    }
+    else if (mlx_is_key_down(data->mlx, MLX_KEY_D))
+    {
+        if(data->map.maps[data->perso->instances[0].y / 64][(data->perso->instances[0].x / 64) + 1] != '1')
+        {
+            data->perso->instances[0].x += 64;
+            data->foot_count++;
+            ft_printf("Vous avez fait %d pas\n", data->foot_count);
+        }
+		ft_collect(data);
+    }
 }
 
 int	open_window(t_data *data)
 {
 	ft_init(data, data->map);
-	image_to_window(data, data->map);
+	image_to_window(data, &data->map);
 	mlx_image_to_window(data->mlx, data->perso, (64 * data->P_position.y), (64 * data->P_position.x));
 	mlx_key_hook(data->mlx, &hook, data);
 	mlx_loop(data->mlx);
@@ -234,7 +337,7 @@ int main(int argc, char **argv)
 		ft_printf("Error\nFichier vide");
 		return(-1);
 	}
-	map.maps = map_read(fd);
+	map.maps = map_read(fd, &map);
 	set_data(&data, map);
 	if (check_error(map.maps) == -1)
 		return (-1);
@@ -248,6 +351,8 @@ int main(int argc, char **argv)
 		ft_printf("Error\nLetter invalide");
 		return(-1);
 	}
+	if (flood_fill(data, &map, argv[1]) == -1)
+		return(-1);
 	open_window(&data);
 	return (0);
 }

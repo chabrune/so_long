@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+        */
+/*   By: chabrune <chabrune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 16:34:07 by chabrune          #+#    #+#             */
-/*   Updated: 2023/01/10 17:29:46 by chabrune         ###   ########.fr       */
+/*   Updated: 2023/01/11 03:17:31 by chabrune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,17 @@ char **map_read(int fd, t_map *map)
 		ft_lstadd_back(&list, tmp);
 		line = get_next_line(fd);
 	}
-	maps = malloc(sizeof(char *) * ft_lstsize(list));
+	maps = calloc(sizeof(char *), ft_lstsize(list) + 1);
 	if (!maps)
 		return (NULL);
 	map->y = ft_lstsize(list);
-	while (list)
+	tmp = list;
+	while (tmp)
 	{
-		maps[i] = ft_strdup(list->content);
-		ft_lstdelone(list, free);
-		list = list->next;
+		maps[i] = ft_strdup(tmp->content);
+		tmp = tmp->next;
 		i++;
 	}
-	maps[i] = NULL;
 	map->x = ft_strlen(*maps);
 	return maps;
 }
@@ -87,6 +86,7 @@ int ckeck_full_one(t_map map)
 
 int check_letter(t_data *data)
 {
+	data->map.x = 0;
 	while(data->map.maps[data->map.x])
 	{
 		data->map.y = 0;
@@ -102,11 +102,7 @@ int check_letter(t_data *data)
 				data->P_position.y = data->map.y;
 				data->check_P++;
 			}
-			if(data->map.maps[data->map.x][data->map.y] != 'P' 
-				&& data->map.maps[data->map.x][data->map.y] != 'C'
-				&& data->map.maps[data->map.x][data->map.y] != 'E' 
-				&& data->map.maps[data->map.x][data->map.y] != '0'
-				&& data->map.maps[data->map.x][data->map.y] != '1')
+			if(data->map.maps[data->map.x][data->map.y] != 'P' && data->map.maps[data->map.x][data->map.y] != 'C' && data->map.maps[data->map.x][data->map.y] != 'E' && data->map.maps[data->map.x][data->map.y] != '0' && data->map.maps[data->map.x][data->map.y] != '1')
 				return(-1);
 			data->map.y++;
 		}
@@ -152,6 +148,7 @@ int check_error_name(char *s)
 
 void	ft_init(t_data *data, t_map map)
 {
+	ft_printf("%d\n%d\n", data->map.y, data->map.x);
 	data->mlx = mlx_init((map.y * 64), (map.x * 64), "so_long", false);
 	data->perso = mlx_texture_to_image(data->mlx, mlx_load_png("PNG/perso.png"));
 	data->wall = mlx_texture_to_image(data->mlx, mlx_load_png("PNG/wall.png"));
@@ -174,8 +171,8 @@ void	image_to_window(t_data *data, t_map *map)
 			mlx_image_to_window(data->mlx, data->land, (64 * j), (64 * i));
 			if (map->maps[i][j] == 'C')
 				mlx_image_to_window(data->mlx, data->col, (64 * j), (64 * i));
-			// if (map->maps[i][j] == 'E')
-			// 	mlx_image_to_window(data->mlx, data->exit, (64 * j), (64 * i));
+			if (map->maps[i][j] == 'E')
+				mlx_image_to_window(data->mlx, data->exit, (64 * j), (64 * i));
 			if (map->maps[i][j] == '1')
 				mlx_image_to_window(data->mlx, data->wall, (64 * j), (64 * i));
 			j++;
@@ -184,24 +181,24 @@ void	image_to_window(t_data *data, t_map *map)
 	}
 }
 
-// void	collect_to_window(t_data *data)
-// {
-// 	int i;
-// 	int j;
+void	collect_to_window(t_data *data)
+{
+	int i;
+	int j;
 
-// 	i = 0;
-// 	while (i < 5)
-// 	{
-// 		j = 0;
-// 		while(j < 34)
-// 		{
-// 			if (data->map->maps[i][j] == 'E')
-// 				mlx_image_to_window(data->mlx, data->exit, (64 * j), (64 * i));
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
+	i = 0;
+	while (i < 5)
+	{
+		j = 0;
+		while(j < 34)
+		{
+			if (data->map.maps[i][j] == 'E')
+				mlx_image_to_window(data->mlx, data->exit, (64 * j), (64 * i));
+			j++;
+		}
+		i++;
+	}
+}
 
 int f_fill(char **mapff, int x, int y)
 {
@@ -221,12 +218,10 @@ int f_fill(char **mapff, int x, int y)
 
 int  flood_fill(t_data data, t_map *map, char *path)
 {
-	int i;
 	int fd;
 	int collect;
 	char **mapff;
 
-	i = 0;
 	fd = open(path, O_RDWR);
 	mapff = map_read(fd, map); 
 	collect = f_fill(mapff, data.P_position.x, data.P_position.y);
@@ -319,11 +314,10 @@ int	open_window(t_data *data)
 int main(int argc, char **argv)
 {
 	int fd;
-	int i;
 	t_map map;
 	t_data data;
 
-	i = 0;
+	
 	if (argc != 2)
 	{
 		ft_printf("Error\nNombre d'argument invalide");
@@ -339,6 +333,7 @@ int main(int argc, char **argv)
 	}
 	map.maps = map_read(fd, &map);
 	set_data(&data, map);
+	ft_printf("%s\n", data.map.maps[0]);
 	if (check_error(map.maps) == -1)
 		return (-1);
 	if (ckeck_full_one(map) == -1)
@@ -353,6 +348,7 @@ int main(int argc, char **argv)
 	}
 	if (flood_fill(data, &map, argv[1]) == -1)
 		return(-1);
+	ft_printf("ca marche\n");
 	open_window(&data);
 	return (0);
 }

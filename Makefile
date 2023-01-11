@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+         #
+#    By: chabrune <chabrune@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 16:34:11 by chabrune          #+#    #+#              #
-#    Updated: 2022/12/21 15:16:03 by chabrune         ###   ########.fr        #
+#    Updated: 2023/01/10 10:10:14 by chabrune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,9 @@
 NAME    	=       so_long
 CFLAGS  	=       -Wextra -Wall -Werror -g3
 CC      	=       gcc
-MLX42   	=       "../MLX42/libmlx42.a" -I include -lglfw -L "/Users/chabrune/.brew/opt/glfw/lib"
+MLX42   	=       "../MLX42/libmlx42.a" -I include -lglfw -L "/usr/local/Cellar/glfw/3.3.8/lib"
+# "/Users/chabrune/.brew/opt/glfw/lib"
+# "/usr/local/Cellar/glfw/3.3.8/lib"
 RM      	=       rm -rf
 FT_PRINTF 	=	"../ft_printf/libftprintf.a"
 LIBFT		=	"../libft/libft.a"

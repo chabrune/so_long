@@ -242,11 +242,15 @@ void	ft_collect(t_data *data)
 	while(i < data->check_C)
 	{
 		if(data->perso->instances[0].y == data->col->instances[i].y && data->perso->instances[0].x == data->col->instances[i].x)
+		{
 			data->col->instances[i].enabled = false;
+			data->check_C--;
+			printf("%d\n", data->check_C);
+			printf("%d\n", data->C_count);
+		}
 		i++;
 	}
-	// if (i == data->check_C)
-	// 	collect_to_window(data);
+
 }
 
 void    hook(mlx_key_data_t keydata, void *param)
@@ -266,6 +270,8 @@ void    hook(mlx_key_data_t keydata, void *param)
             ft_printf("Vous avez fait %d pas\n", data->foot_count);
         }
 		ft_collect(data);
+		if(data->C_count == data->check_C && data->map.maps[data->perso->instances[0].y/64][data->perso->instances[0].x/64] == 'E')
+			mlx_close_window(data->mlx);
 	}
     else if (mlx_is_key_down(data->mlx, MLX_KEY_S))
     {
@@ -276,6 +282,8 @@ void    hook(mlx_key_data_t keydata, void *param)
             ft_printf("Vous avez fait %d pas\n", data->foot_count);
         }
 		ft_collect(data);
+		if(data->C_count == data->check_C && data->map.maps[data->perso->instances[0].y/64][data->perso->instances[0].x/64] == 'E')
+			mlx_close_window(data->mlx);
     }
     else if (mlx_is_key_down(data->mlx, MLX_KEY_A))
     {
@@ -286,6 +294,8 @@ void    hook(mlx_key_data_t keydata, void *param)
             ft_printf("Vous avez fait %d pas\n", data->foot_count);
         }
 		ft_collect(data);
+		if(data->C_count == data->check_C && data->map.maps[data->perso->instances[0].y/64][data->perso->instances[0].x/64] == 'E')
+			mlx_close_window(data->mlx);
     }
     else if (mlx_is_key_down(data->mlx, MLX_KEY_D))
     {
@@ -296,6 +306,8 @@ void    hook(mlx_key_data_t keydata, void *param)
             ft_printf("Vous avez fait %d pas\n", data->foot_count);
         }
 		ft_collect(data);
+		if(data->C_count == data->check_C && data->map.maps[data->perso->instances[0].y/64][data->perso->instances[0].x/64] == 'E')
+			mlx_close_window(data->mlx);
     }
 }
 

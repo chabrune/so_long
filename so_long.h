@@ -58,6 +58,23 @@ typedef struct s_data
     mlx_t   *mlx;
 } t_data;
 
+int	open_window(t_data *data);
+void	ft_collect(t_data *data);
+int  flood_fill(t_data data, t_map *map, char *path);
+int f_fill(char **mapff, int x, int y);
+void	image_to_window(t_data *data, t_map *map);
+void    hook(mlx_key_data_t keydata, void *param);
+void	ft_init(t_data *data, t_map map);
+int check_error_name(char *s);
+int	check_rectangular(char **maps);
+int check_letter(t_data *data);
+int check_full_one(t_map map);
+char **map_read(int fd, t_map *map);
+void	set_data(t_data *data, t_map map);
+void   ft_key_W(t_data *data);
+void   ft_key_A(t_data *data);
+void   ft_key_D(t_data *data);
+void   ft_key_S(t_data *data);
 char	*ft_strdup(const char *s);
 size_t	ft_strlen(const char *str);
 char	*ft_strchr(const char *s, int c);

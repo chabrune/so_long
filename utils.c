@@ -28,10 +28,10 @@ char	*ft_strdup(const char *s)
 		str[i] = s[i];
 		i++;
 	}
-	if(ft_strchr(str,'\n'))
-        str[--i] = '\0';
-    else
-        str[i] = '\0';
+	if (ft_strchr(str, '\n'))
+		str[--i] = '\0';
+	else
+		str[i] = '\0';
 	return (str);
 }
 
@@ -45,7 +45,6 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-
 char	*ft_strchr(const char *s, int c)
 {
 	char	*str;
@@ -58,4 +57,16 @@ char	*ft_strchr(const char *s, int c)
 		str++;
 	}
 	return (str);
+}
+
+void	set_data(t_data *data, t_map map)
+{
+	data->map.maps = map.maps;
+	data->map.x = 0;
+	data->map.y = 0;
+	data->check_C = 0;
+	data->check_E = 0;
+	data->check_P = 0;
+    data->foot_count = 0;
+    data->C_count = 0;
 }

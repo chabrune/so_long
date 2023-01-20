@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chabrune <chabrune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 16:34:00 by chabrune          #+#    #+#             */
-/*   Updated: 2023/01/11 02:54:34 by chabrune         ###   ########.fr       */
+/*   Updated: 2023/01/20 17:39:49 by chabrune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_strdup(const char *s)
 	size_t	len;
 
 	i = 0;
-	len = ft_strlen(s);
+	len = ft_strlen_sl(s);
 	str = (char *)malloc(sizeof(char) * (len + 1));
 	if (!str)
 		return (NULL);
@@ -28,6 +28,7 @@ char	*ft_strdup(const char *s)
 		str[i] = s[i];
 		i++;
 	}
+	str[i] = 0;
 	if (ft_strchr(str, '\n'))
 		str[--i] = '\0';
 	else
@@ -35,9 +36,9 @@ char	*ft_strdup(const char *s)
 	return (str);
 }
 
-size_t	ft_strlen(const char *str)
+int	ft_strlen_sl(const char *str)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -49,6 +50,8 @@ char	*ft_strchr(const char *s, int c)
 {
 	char	*str;
 
+	if (!s)
+		return (NULL);
 	str = (char *)s;
 	while (*str != (char)c)
 	{
@@ -67,6 +70,18 @@ void	set_data(t_data *data, t_map map)
 	data->check_C = 0;
 	data->check_E = 0;
 	data->check_P = 0;
-    data->foot_count = 0;
-    data->C_count = 0;
+	data->foot_count = 0;
+	data->C_count = 0;
+}
+
+void	ft_putstr(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		write(1, &s[i], 1);
+		i++;
+	}
 }

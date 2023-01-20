@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: chabrune <chabrune@student.42.fr>          +#+  +:+       +#+         #
+#    By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 16:34:11 by chabrune          #+#    #+#              #
-#    Updated: 2023/01/10 10:10:14 by chabrune         ###   ########.fr        #
+#    Updated: 2023/01/19 17:04:49 by chabrune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@
 NAME    	=       so_long
 CFLAGS  	=       -Wextra -Wall -Werror -g3
 CC      	=       gcc
-MLX42   	=       "../MLX42/libmlx42.a" -I include -lglfw -L "/usr/local/Cellar/glfw/3.3.8/lib"
+MLX42   	=       "../MLX42/libmlx42.a" -I include -lglfw -L "/Users/chabrune/.brew/opt/glfw/lib"
 # "/Users/chabrune/.brew/opt/glfw/lib"
 # "/usr/local/Cellar/glfw/3.3.8/lib"
 RM      	=       rm -rf
@@ -34,6 +34,10 @@ SRCS       	=	so_long.c \
 TASOEUR		= 	utils.c \
 				get_next_line.c \
 				get_next_line_utils.c \
+				graph.c \
+				key_hook.c \
+				check_error.c \
+				check_error2.c
 
 #######################################################
 ###### RULES

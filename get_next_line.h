@@ -6,7 +6,7 @@
 /*   By: chabrune <charlesbrunet51220@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 06:54:50 by chabrune          #+#    #+#             */
-/*   Updated: 2022/12/19 11:38:56 by chabrune         ###   ########.fr       */
+/*   Updated: 2023/01/20 15:14:15 by chabrune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 #  define BUFFER_SIZE 42
 # endif
 
-char	*ft_strjoin_GNL(char *s1, char *s2);
-size_t	ft_strlen_GNL(const char *str);
-int		ft_strchr_GNL(char *s, int c);
+char	*ft_strjoin_gnl(char *s1, char *s2);
+size_t	ft_strlen_gnl(const char *str);
+int		ft_strchr_gnl(char *s, int c);
 char	*get_next_line(int fd);
 char	*ft_read(int fd, char *stash);
 char	*ft_line(char *stash);

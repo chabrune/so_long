@@ -24,14 +24,6 @@ So_long est un jeu 2D où le joueur doit collecter tous les items sur une carte 
 | C | Collectible |
 | E | Sortie |
 
-## 🛠️ Compilation
-
-```bash
-make        # Compile le jeu
-make clean  # Nettoie les fichiers objets
-make fclean # Nettoie tout
-make re     # Recompile
-```
 
 ## 🎯 Objectifs
 - Collecter tous les items
